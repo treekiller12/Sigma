@@ -18,7 +18,7 @@ class HelloScreen extends StatefulWidget {
 
 class _HelloScreenState extends State<HelloScreen> {
   LoginState state = LoginState.waiting;
-  String status = "Otwóffgggrz aplikację na telefonie";
+  String status = "Otwóffgggrz aplesgikację na telefonie";
   late final BonsoirBroadcast broadcast;
 
   @override
