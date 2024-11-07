@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             const Align(
                               alignment: Alignment.centerLeft,
-                              child: Text("Zacznij logując się do filman.cc!",
+                              child: Text("Zacznij logując się do filman.cc",
                                   style: TextStyle(
                                     fontSize: 32,
                                   )),
