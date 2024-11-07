@@ -78,60 +78,97 @@ class _HelloScreenState extends State<HelloScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Filman TV Client",
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.5,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                "Twoje filmy i seriale",
-                style: TextStyle(
-                  color: Colors.grey[400],
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(height: 50),
-              Text(
-                status,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 50),
-              ElevatedButton(
-                onPressed: () {
-                  // Dodaj akcję do przycisku logowania, jeśli jest potrzebna
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,  // Use backgroundColor instead of primary
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: const Text(
-                  "Zaloguj się",
+        child: Column(
+          children: [
+            // Górna część z logo
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Filman TV Client",
                   style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
                     color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.5,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 50),  // Odstęp dla reszty elementów
+            // Centralna część ekranu
+            Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Instrukcja
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        "Aby się zalogować, otwórz aplikację Filman na telefonie i kliknij 'Zaloguj się' na Android TV.",
+                        style: TextStyle(
+                          color: Colors.grey[400],
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Text(
+                      "Twoje filmy i seriale",
+                      style: TextStyle(
+                        color: Colors.grey[400],
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 50),
+                    Text(
+                      status,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 50),
+                    ElevatedButton(
+                      onPressed: state == LoginState.loginin
+                          ? null  // Przyciski nieklikalny podczas logowania
+                          : () {
+                              setState(() {
+                                state = LoginState.loginin;
+                                status = "Rozpoczynanie logowania...";
+                              });
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: state == LoginState.loginin
+                            ? Colors.grey // Kolor szary podczas logowania
+                            : Colors.redAccent,  // Kolor normalny przycisku
+                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Text(
+                        state == LoginState.loginin
+                            ? "Logowanie..."  // Tekst w czasie logowania
+                            : "Oczekiwanie...",  // Tekst początkowy
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
