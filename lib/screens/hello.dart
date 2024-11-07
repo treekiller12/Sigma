@@ -111,22 +111,16 @@ class _HelloScreenState extends State<HelloScreen> {
         child: SafeArea(
           child: Stack(
             children: [
-              Positioned(
+              // Napis w lewym górnym rogu
+              const Positioned(
                 top: 20,
                 left: 16,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent.withOpacity(0.8),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Text(
-                    "Filman TV Client",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
+                child: Text(
+                  "Filman TV Client",
+                  style: TextStyle(
+                    color: Colors.blueAccent,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -167,7 +161,7 @@ class _HelloScreenState extends State<HelloScreen> {
                           duration: const Duration(milliseconds: 200),
                           decoration: BoxDecoration(
                             color: buttonColor,
-                            borderRadius: BorderRadius.circular(20),  // Większe zaokrąglenie
+                            borderRadius: BorderRadius.circular(20), // Zaokrąglenie
                             boxShadow: _isHovered
                                 ? [
                                     BoxShadow(
@@ -187,15 +181,15 @@ class _HelloScreenState extends State<HelloScreen> {
                             style: ElevatedButton.styleFrom(
                               elevation: 0,
                               backgroundColor: buttonColor,
-                              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),  // Mniejszy rozmiar
+                              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),  // Większe zaokrąglenie
+                                borderRadius: BorderRadius.circular(20),
                               ),
                             ),
                             child: Text(
                               buttonText,
                               style: const TextStyle(
-                                fontSize: 18,  // Mniejszy rozmiar czcionki
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),
