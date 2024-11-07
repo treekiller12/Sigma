@@ -84,11 +84,11 @@ class _HelloScreenState extends State<HelloScreen> {
 
     switch (state) {
       case LoginState.waiting:
-        buttonColor = Colors.orangeAccent; // Kolor dla stanu oczekiwania
+        buttonColor = Colors.grey; // Kolor dla stanu oczekiwania
         buttonText = "Oczekuje na logowanie...";
         break;
       case LoginState.loginin:
-        buttonColor = Colors.blueAccent; // Kolor dla stanu logowania
+        buttonColor = Colors.yellowAccent; // Kolor dla stanu logowania
         buttonText = "Logowanie...";
         break;
       case LoginState.done:
@@ -98,94 +98,115 @@ class _HelloScreenState extends State<HelloScreen> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF0D0D0D), // Ciemny odcień u góry
+              Color(0xFF1C1C1C), // Jaśniejszy odcień u dołu
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: Stack(
             children: [
-              const Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text(
-                    "Filman TV Client",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                    ),
+              Positioned(
+                top: 20,
+                left: 16,
+                child: Text(
+                  "Filman TV Client",
+                  style: TextStyle(
+                    color: Colors.redAccent,
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 4.0,
+                        color: Colors.black54,
+                        offset: Offset(2.0, 2.0),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(height: 50),
-              Text(
-                "Aby się zalogować, otwórz aplikację Filman na telefonie i kliknij 'Zaloguj się' na Android TV.",
-                style: TextStyle(
-                  color: Colors.grey[400],
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 50),
-              Focus(
-                focusNode: _loginFocusNode,
-                onFocusChange: (hasFocus) {
-                  setState(() {
-                    _isHovered = hasFocus; // Zmiana na podstawie fokusu
-                  });
-                },
-                child: MouseRegion(
-                  onEnter: (_) {
-                    setState(() {
-                      _isHovered = true;
-                    });
-                  },
-                  onExit: (_) {
-                    setState(() {
-                      _isHovered = false;
-                    });
-                  },
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    decoration: BoxDecoration(
-                      color: buttonColor, // Dynamiczny kolor przycisku
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: _isHovered
-                          ? [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.5),
-                                blurRadius: 5,
-                                offset: const Offset(0, 5),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 70),
+                    Text(
+                      "Aby się zalogować, otwórz aplikację Filman na telefonie i kliknij 'Zaloguj się' na Android TV.",
+                      style: TextStyle(
+                        color: Colors.grey[400],
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 50),
+                    Focus(
+                      focusNode: _loginFocusNode,
+                      onFocusChange: (hasFocus) {
+                        setState(() {
+                          _isHovered = hasFocus; // Zmiana na podstawie fokusu
+                        });
+                      },
+                      child: MouseRegion(
+                        onEnter: (_) {
+                          setState(() {
+                            _isHovered = true;
+                          });
+                        },
+                        onExit: (_) {
+                          setState(() {
+                            _isHovered = false;
+                          });
+                        },
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          decoration: BoxDecoration(
+                            color: buttonColor, // Dynamiczny kolor przycisku
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: _isHovered
+                                ? [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.5),
+                                      blurRadius: 5,
+                                      offset: const Offset(0, 5),
+                                    ),
+                                  ]
+                                : null,
+                          ),
+                          child: ElevatedButton(
+                            onPressed: (state == LoginState.waiting || state == LoginState.loginin)
+                                ? null
+                                : () {
+                                    // Działanie po kliknięciu przycisku, gdy zalogowano
+                                  },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              backgroundColor: buttonColor,
+                              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                            ]
-                          : null,
-                    ),
-                    child: ElevatedButton(
-                      onPressed: (state == LoginState.waiting || state == LoginState.loginin)
-                          ? null
-                          : () {
-                              // Działanie po kliknięciu przycisku, gdy zalogowano
-                            },
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        backgroundColor: buttonColor,
-                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: Text(
-                        buttonText, // Tekst przycisku w zależności od stanu
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                            ),
+                            child: Text(
+                              buttonText, // Tekst przycisku w zależności od stanu
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ],
