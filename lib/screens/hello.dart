@@ -3,6 +3,8 @@ import "package:provider/provider.dart";
 import "package:unofficial_filman_client/notifiers/filman.dart";
 import "package:unofficial_filman_client/screens/main.dart";
 import "package:bonsoir/bonsoir.dart";
+import "package:unofficial_filman_client/screens/login.dart";
+import "package:unofficial_filman_client/screens/register.dart";
 import "dart:io";
 import "package:device_info_plus/device_info_plus.dart";
 
@@ -23,7 +25,7 @@ class _HelloScreenState extends State<HelloScreen> {
   @override
   void initState() {
     super.initState();
-    setupLogin();
+    setupLogin();  // Uruchom nasłuch na serwerze zaraz po załadowaniu ekranu
   }
 
   @override
@@ -112,10 +114,15 @@ class _HelloScreenState extends State<HelloScreen> {
               const SizedBox(height: 50),
               ElevatedButton(
                 onPressed: () {
-                  // Dodaj akcję do przycisku logowania, jeśli jest potrzebna
+                  // Przejdź do ekranu logowania
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,  // Use backgroundColor instead of primary
+                  backgroundColor: Colors.redAccent,  // Użyj backgroundColor zamiast primary
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -123,6 +130,51 @@ class _HelloScreenState extends State<HelloScreen> {
                 ),
                 child: const Text(
                   "Zaloguj się",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  // Przejdź do ekranu rejestracji
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const RegisterScreen(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.greenAccent,
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text(
+                  "Zarejestruj się",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: null,  // Ten przycisk jest teraz tylko informacyjny
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text(
+                  "Połącz z serwerem",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
