@@ -78,21 +78,20 @@ class _HelloScreenState extends State<HelloScreen> {
 
   @override
   Widget build(final BuildContext context) {
-    // Definiowanie kolorów przycisku na podstawie stanu logowania
     Color buttonColor;
     String buttonText;
 
     switch (state) {
       case LoginState.waiting:
-        buttonColor = Colors.grey; // Kolor dla stanu oczekiwania
+        buttonColor = Colors.grey;
         buttonText = "Oczekuje na logowanie...";
         break;
       case LoginState.loginin:
-        buttonColor = Colors.yellowAccent; // Kolor dla stanu logowania
+        buttonColor = Colors.yellowAccent;
         buttonText = "Logowanie...";
         break;
       case LoginState.done:
-        buttonColor = Colors.greenAccent; // Kolor dla stanu zalogowano
+        buttonColor = Colors.greenAccent;
         buttonText = "Zalogowano";
         break;
     }
@@ -104,8 +103,8 @@ class _HelloScreenState extends State<HelloScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF0D0D0D), // Ciemny odcień u góry
-              Color(0xFF1C1C1C), // Jaśniejszy odcień u dołu
+              Color(0xFF0D0D0D),
+              Color(0xFF1C1C1C),
             ],
           ),
         ),
@@ -115,20 +114,19 @@ class _HelloScreenState extends State<HelloScreen> {
               Positioned(
                 top: 20,
                 left: 16,
-                child: Text(
-                  "Filman TV Client",
-                  style: TextStyle(
-                    color: Colors.redAccent,
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.2,
-                    shadows: [
-                      Shadow(
-                        blurRadius: 4.0,
-                        color: Colors.black54,
-                        offset: Offset(2.0, 2.0),
-                      ),
-                    ],
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.blueAccent.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Text(
+                    "Filman TV Client",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
@@ -151,7 +149,7 @@ class _HelloScreenState extends State<HelloScreen> {
                       focusNode: _loginFocusNode,
                       onFocusChange: (hasFocus) {
                         setState(() {
-                          _isHovered = hasFocus; // Zmiana na podstawie fokusu
+                          _isHovered = hasFocus;
                         });
                       },
                       child: MouseRegion(
@@ -168,8 +166,8 @@ class _HelloScreenState extends State<HelloScreen> {
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           decoration: BoxDecoration(
-                            color: buttonColor, // Dynamiczny kolor przycisku
-                            borderRadius: BorderRadius.circular(8),
+                            color: buttonColor,
+                            borderRadius: BorderRadius.circular(20),  // Większe zaokrąglenie
                             boxShadow: _isHovered
                                 ? [
                                     BoxShadow(
@@ -184,20 +182,20 @@ class _HelloScreenState extends State<HelloScreen> {
                             onPressed: (state == LoginState.waiting || state == LoginState.loginin)
                                 ? null
                                 : () {
-                                    // Działanie po kliknięciu przycisku, gdy zalogowano
+                                    // Akcja po kliknięciu przycisku
                                   },
                             style: ElevatedButton.styleFrom(
                               elevation: 0,
                               backgroundColor: buttonColor,
-                              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),  // Mniejszy rozmiar
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(20),  // Większe zaokrąglenie
                               ),
                             ),
                             child: Text(
-                              buttonText, // Tekst przycisku w zależności od stanu
+                              buttonText,
                               style: const TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,  // Mniejszy rozmiar czcionki
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),
