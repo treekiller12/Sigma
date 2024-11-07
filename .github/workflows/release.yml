@@ -1,14 +1,13 @@
 name: Build and Release Flutter App
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
       - main
 
 jobs:
   update-version:
-    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
+    if: startsWith(github.event.head_commit.message, 'Release/')
     name: Update Version Number
     runs-on: ubuntu-latest
 
@@ -19,7 +18,7 @@ jobs:
       - name: Extract Release Version
         id: extract_version
         run: |
-          version=$(echo "${{ github.event.pull_request.head.ref }}" | sed -e 's|release/||')
+          version=$(echo "${{ github.event.head_commit.message }}" | sed -e 's|Release/||')
           echo "release_version=${version}" >> $GITHUB_OUTPUT
 
       - name: Update Version in pubspec.yaml
@@ -88,7 +87,7 @@ jobs:
       - name: Extract Release Version
         id: extract_version
         run: |
-          version=$(echo "${{ github.event.pull_request.head.ref }}" | sed -e 's|release/||')
+          version=$(echo "${{ github.event.head_commit.message }}" | sed -e 's|Release/||')
           echo "release_version=${version}" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
