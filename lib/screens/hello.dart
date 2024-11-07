@@ -115,9 +115,8 @@ class _HelloScreenState extends State<HelloScreen> {
                   // Dodaj akcję do przycisku logowania, jeśli jest potrzebna
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.redAccent,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 40, vertical: 15),
+                  backgroundColor: Colors.redAccent,  // Use backgroundColor instead of primary
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
