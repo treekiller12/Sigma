@@ -1,10 +1,10 @@
-import "package:flutter/material.dart";
-import "package:provider/provider.dart";
-import "package:unofficial_filman_client/notifiers/filman.dart";
-import "package:unofficial_filman_client/screens/main.dart";
-import "package:bonsoir/bonsoir.dart";
-import "dart:io";
-import "package:device_info_plus/device_info_plus.dart";
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:unofficial_filman_client/notifiers/filman.dart';
+import 'package:unofficial_filman_client/screens/main.dart';
+import 'package:bonsoir/bonsoir.dart';
+import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
 
 enum LoginState { waiting, loginin, done }
 
@@ -19,6 +19,8 @@ class _HelloScreenState extends State<HelloScreen> {
   LoginState state = LoginState.waiting;
   String status = "Otwórz aplikację na telefonie";
   late final BonsoirBroadcast broadcast;
+  FocusNode _loginFocusNode = FocusNode();
+  bool _isHovered = false;
 
   @override
   void initState() {
@@ -28,6 +30,7 @@ class _HelloScreenState extends State<HelloScreen> {
 
   @override
   void dispose() {
+    _loginFocusNode.dispose();
     super.dispose();
     broadcast.stop();
   }
@@ -78,97 +81,91 @@ class _HelloScreenState extends State<HelloScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: Column(
-          children: [
-            // Górna część z logo
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Align(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Align(
                 alignment: Alignment.topLeft,
-                child: Text(
-                  "Filman TV Client",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.5,
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    "Filman TV Client",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 50),  // Odstęp dla reszty elementów
-            // Centralna część ekranu
-            Expanded(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Instrukcja
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        "Aby się zalogować, otwórz aplikację Filman na telefonie i kliknij 'Zaloguj się' na Android TV.",
-                        style: TextStyle(
-                          color: Colors.grey[400],
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          textAlign: TextAlign.center,
+              const SizedBox(height: 50),
+              Text(
+                "Aby się zalogować, otwórz aplikację Filman na telefonie i kliknij 'Zaloguj się' na Android TV.",
+                style: TextStyle(
+                  color: Colors.grey[400],
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 50),
+              Focus(
+                focusNode: _loginFocusNode,
+                onFocusChange: (hasFocus) {
+                  setState(() {
+                    // Zmieniamy stan podświetlenia na podstawie fokusu
+                  });
+                },
+                child: MouseRegion(
+                  onEnter: (_) {
+                    setState(() {
+                      _isHovered = true; // Włącz podświetlenie
+                    });
+                  },
+                  onExit: (_) {
+                    setState(() {
+                      _isHovered = false; // Wyłącz podświetlenie
+                    });
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200), // Czas trwania animacji
+                    decoration: BoxDecoration(
+                      color: _isHovered || _loginFocusNode.hasFocus
+                          ? Colors.greenAccent // Kolor przy podświetleniu
+                          : Colors.redAccent, // Domyślny kolor
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.5),
+                          blurRadius: 5,
+                          offset: const Offset(0, 5),
                         ),
-                      ),
+                      ],
                     ),
-                    const SizedBox(height: 30),
-                    Text(
-                      "Twoje filmy i seriale",
-                      style: TextStyle(
-                        color: Colors.grey[400],
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 50),
-                    Text(
-                      status,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 50),
-                    ElevatedButton(
-                      onPressed: state == LoginState.loginin
-                          ? null  // Przyciski nieklikalny podczas logowania
-                          : () {
-                              setState(() {
-                                state = LoginState.loginin;
-                                status = "Rozpoczynanie logowania...";
-                              });
-                            },
+                    child: ElevatedButton(
+                      onPressed: null, // Przyciski nieklikalne, gdy status jest wyczekiwany
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: state == LoginState.loginin
-                            ? Colors.grey // Kolor szary podczas logowania
-                            : Colors.redAccent,  // Kolor normalny przycisku
+                        elevation: 0, // Bez domyślnej ewolucji przycisku
                         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: Text(
-                        state == LoginState.loginin
-                            ? "Logowanie..."  // Tekst w czasie logowania
-                            : "Oczekiwanie...",  // Tekst początkowy
-                        style: const TextStyle(
+                      child: const Text(
+                        "Zaloguj się",
+                        style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
