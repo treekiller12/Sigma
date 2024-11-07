@@ -78,6 +78,25 @@ class _HelloScreenState extends State<HelloScreen> {
 
   @override
   Widget build(final BuildContext context) {
+    // Definiowanie kolorów przycisku na podstawie stanu logowania
+    Color buttonColor;
+    String buttonText;
+
+    switch (state) {
+      case LoginState.waiting:
+        buttonColor = Colors.orangeAccent; // Kolor dla stanu oczekiwania
+        buttonText = "Oczekuje na logowanie...";
+        break;
+      case LoginState.loginin:
+        buttonColor = Colors.blueAccent; // Kolor dla stanu logowania
+        buttonText = "Logowanie...";
+        break;
+      case LoginState.done:
+        buttonColor = Colors.greenAccent; // Kolor dla stanu zalogowano
+        buttonText = "Zalogowano";
+        break;
+    }
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -114,47 +133,52 @@ class _HelloScreenState extends State<HelloScreen> {
                 focusNode: _loginFocusNode,
                 onFocusChange: (hasFocus) {
                   setState(() {
-                    // Zmieniamy stan podświetlenia na podstawie fokusu
+                    _isHovered = hasFocus; // Zmiana na podstawie fokusu
                   });
                 },
                 child: MouseRegion(
                   onEnter: (_) {
                     setState(() {
-                      _isHovered = true; // Włącz podświetlenie
+                      _isHovered = true;
                     });
                   },
                   onExit: (_) {
                     setState(() {
-                      _isHovered = false; // Wyłącz podświetlenie
+                      _isHovered = false;
                     });
                   },
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200), // Czas trwania animacji
+                    duration: const Duration(milliseconds: 200),
                     decoration: BoxDecoration(
-                      color: _isHovered || _loginFocusNode.hasFocus
-                          ? Colors.greenAccent // Kolor przy podświetleniu
-                          : Colors.redAccent, // Domyślny kolor
+                      color: buttonColor, // Dynamiczny kolor przycisku
                       borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.5),
-                          blurRadius: 5,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
+                      boxShadow: _isHovered
+                          ? [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.5),
+                                blurRadius: 5,
+                                offset: const Offset(0, 5),
+                              ),
+                            ]
+                          : null,
                     ),
                     child: ElevatedButton(
-                      onPressed: null, // Przyciski nieklikalne, gdy status jest wyczekiwany
+                      onPressed: (state == LoginState.waiting || state == LoginState.loginin)
+                          ? null
+                          : () {
+                              // Działanie po kliknięciu przycisku, gdy zalogowano
+                            },
                       style: ElevatedButton.styleFrom(
-                        elevation: 0, // Bez domyślnej ewolucji przycisku
+                        elevation: 0,
+                        backgroundColor: buttonColor,
                         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text(
-                        "Zaloguj się",
-                        style: TextStyle(
+                      child: Text(
+                        buttonText, // Tekst przycisku w zależności od stanu
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
