@@ -1,11 +1,10 @@
-import "package:device_info_plus/device_info_plus.dart";
 import "package:flutter/material.dart";
-import "package:bonsoir/bonsoir.dart";
-import "dart:io";
-
 import "package:provider/provider.dart";
 import "package:unofficial_filman_client/notifiers/filman.dart";
 import "package:unofficial_filman_client/screens/main.dart";
+import "package:bonsoir/bonsoir.dart";
+import "dart:io";
+import "package:device_info_plus/device_info_plus.dart";
 
 enum LoginState { waiting, loginin, done }
 
@@ -18,7 +17,7 @@ class HelloScreen extends StatefulWidget {
 
 class _HelloScreenState extends State<HelloScreen> {
   LoginState state = LoginState.waiting;
-  String status = "Otwóffgggrz aplesgikację na telefonie";
+  String status = "Otwórz aplikację na telefonie";
   late final BonsoirBroadcast broadcast;
 
   @override
@@ -77,29 +76,65 @@ class _HelloScreenState extends State<HelloScreen> {
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Column(
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Center(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Unofficial Filman Client for TVs"),
-              Text("cos tam")
+              const Text(
+                "Filman TV Client",
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.5,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                "Twoje filmy i seriale",
+                style: TextStyle(
+                  color: Colors.grey[400],
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 50),
+              Text(
+                status,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 50),
+              ElevatedButton(
+                onPressed: () {
+                  // Dodaj akcję do przycisku logowania, jeśli jest potrzebna
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.redAccent,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 40, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text(
+                  "Zaloguj się",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ],
           ),
-          const SizedBox(
-            width: 24,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [const Text("Status"), Text(status)],
-          ),
-        ],
+        ),
       ),
-    ));
+    );
   }
 }
