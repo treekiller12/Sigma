@@ -111,17 +111,37 @@ class _HelloScreenState extends State<HelloScreen> {
         child: SafeArea(
           child: Stack(
             children: [
-              // Napis w lewym górnym rogu
-              const Positioned(
-                top: 20,
-                left: 16,
-                child: Text(
-                  "Filman TV Client",
-                  style: TextStyle(
-                    color: Colors.blueAccent,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+              // Pasek u góry z logo i tytułem
+              Container(
+                height: 60,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black,
+                      Colors.transparent,
+                    ],
                   ),
+                ),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/logo.png', // Zaktualizuj ścieżkę do swojego logo
+                      height: 30,
+                      width: 30,
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      "Filman TV Client",
+                      style: TextStyle(
+                        color: Colors.blueAccent,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Center(
@@ -130,7 +150,7 @@ class _HelloScreenState extends State<HelloScreen> {
                   children: [
                     const SizedBox(height: 70),
                     Text(
-                      "Aby się zalogować, otwórz aplikację Filman na telefonie i kliknij 'Zaloguj się' na Android TV.",
+                      "Aby się zalogować, otwórz aplikację Filman client na telefonie i kliknij 'Zaloguj się na Android TV'.",
                       style: TextStyle(
                         color: Colors.grey[400],
                         fontSize: 16,
@@ -161,7 +181,7 @@ class _HelloScreenState extends State<HelloScreen> {
                           duration: const Duration(milliseconds: 200),
                           decoration: BoxDecoration(
                             color: buttonColor,
-                            borderRadius: BorderRadius.circular(20), // Zaokrąglenie
+                            borderRadius: BorderRadius.circular(20),
                             boxShadow: _isHovered
                                 ? [
                                     BoxShadow(
