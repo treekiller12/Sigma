@@ -16,7 +16,8 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int currentPageIndex = 0;
-  bool isExpanded = false; // Flag to track the state of the sidebar
+  bool isExpanded = false;
+  FocusNode menuFocusNode = FocusNode(); // FocusNode for the menu
 
   @override
   void initState() {
@@ -26,25 +27,53 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(0), // Hide the top app bar
-        child: Container(),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text('Filman TV Client'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (final context) => const SettingsScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.settings),
+            color: Colors.white,
+          ),
+          IconButton(
+            onPressed: () {
+              Provider.of<FilmanNotifier>(context, listen: false).logout();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (final context) => const HelloScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.logout),
+            color: Colors.white,
+          ),
+        ],
+        automaticallyImplyLeading: false,
       ),
       body: Row(
         children: [
           // Side menu (left panel)
-          FocusTraversalGroup(
-            child: MouseRegion(
-              onEnter: (_) {
-                setState(() {
-                  isExpanded = true;
-                });
-              },
-              onExit: (_) {
-                setState(() {
-                  isExpanded = false;
-                });
-              },
+          MouseRegion(
+            onEnter: (_) {
+              setState(() {
+                isExpanded = true;
+              });
+            },
+            onExit: (_) {
+              setState(() {
+                isExpanded = false;
+              });
+            },
+            child: Focus(
+              focusNode: menuFocusNode, // Assigning focus to the menu
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 width: isExpanded ? 200 : 60, // Toggle width based on expansion state
@@ -55,7 +84,7 @@ class _MainScreenState extends State<MainScreen> {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Image.asset(
-                        'assets/logo.png', // Update the path to your logo
+                        'assets/logo.png', // Make sure to update the path to your logo
                         height: 50,
                         width: 50,
                       ),
@@ -95,7 +124,7 @@ class _MainScreenState extends State<MainScreen> {
       leading: Icon(
         icon,
         color: isSelected ? Colors.redAccent : Colors.white,
-        size: 24, // Smaller icon size
+        size: 30, // Smaller icons to bring them closer together
       ),
       title: AnimatedOpacity(
         opacity: isExpanded ? 1.0 : 0.0, // Show the label only when expanded
@@ -105,7 +134,6 @@ class _MainScreenState extends State<MainScreen> {
           style: TextStyle(
             color: isSelected ? Colors.redAccent : Colors.white,
             fontWeight: FontWeight.bold,
-            fontSize: 14, // Smaller text size for the label
           ),
         ),
       ),
