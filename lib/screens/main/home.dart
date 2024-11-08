@@ -44,58 +44,33 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  // Funkcja, która buduje kartę filmu z powiększeniem przy zaznaczeniu
-  Widget _buildFilmCard(final BuildContext context, final Film film, final FocusNode focusNode) {
-    return Focus(
-      focusNode: focusNode,
-      onFocusChange: (hasFocus) {
-        setState(() {
-          // Przypisanie stanu powiększenia na podstawie focusa
-        });
-      },
-      child: Card(
-        child: InkWell(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (final context) => FilmScreen(
-                  url: film.link,
-                  title: film.title,
-                  image: film.imageUrl,
-                ),
-              ),
-            );
-          },
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              transform: Matrix4.identity()..scale(focusNode.hasFocus ? 1.15 : 1.0), // Powiększenie obrazu
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                boxShadow: [
-                  if (focusNode.hasFocus) // Dodanie cienia, gdy film jest wybrany
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 6,
-                    ),
-                ],
-              ),
-              child: FastCachedImage(
-                url: film.imageUrl,
-                fit: BoxFit.cover,
-                loadingBuilder: (final context, final progress) => SizedBox(
-                  height: 180,
-                  width: 116,
-                  child: Center(
-                    child: CircularProgressIndicator(
-                        value: progress.progressPercentage.value),
-                  ),
-                ),
+  Widget _buildFilmCard(final BuildContext context, final Film film) {
+    return Card(
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (final context) => FilmScreen(
+                url: film.link,
+                title: film.title,
+                image: film.imageUrl,
               ),
             ),
-          ),
+          );
+        },
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+          child: FastCachedImage(
+              url: film.imageUrl,
+              fit: BoxFit.cover,
+              loadingBuilder: (final context, final progress) => SizedBox(
+                    height: 180,
+                    width: 116,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                          value: progress.progressPercentage.value),
+                    ),
+                  )),
         ),
       ),
     );
@@ -160,8 +135,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 scrollDirection: Axis.horizontal,
                                 children: [
                                   for (final Film film
-                                      in snapshot.data?.getFilms(category) ?? [])
-                                    _buildFilmCard(context, film, FocusNode()),
+                                      in snapshot.data?.getFilms(category) ??
+                                          [])
+                                    _buildFilmCard(context, film),
                                 ],
                               ),
                             ),
