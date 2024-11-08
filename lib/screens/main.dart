@@ -1,3 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:unofficial_filman_client/screens/home.dart';
+import 'package:unofficial_filman_client/screens/settings.dart';
+import 'package:unofficial_filman_client/screens/watched.dart';
+import 'package:unofficial_filman_client/screens/offline.dart';
+
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
 class _MainScreenState extends State<MainScreen> {
   int currentPageIndex = 0;
 
@@ -31,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
                   children: [
                     _buildMenuItem(Icons.home, "Strona Główna", 0, homeFocusNode),
                     _buildMenuItem(Icons.watch_later, "Oglądane", 1, watchedFocusNode),
-                    _buildMenuItem(Icons.download, "Pobrane", 2, offlineFocusNode),
+                    _buildMenuItem(Icons.download, "Offline", 2, offlineFocusNode),
                     _buildMenuItem(Icons.settings, "Ustawienia", 3, settingsFocusNode),
                   ],
                 ),
@@ -39,13 +52,21 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
           Expanded(
-            child: IndexedStack(
-              index: currentPageIndex,
-              children: const [
-                HomePage(),
-                WatchedPage(),
-                OfflinePage(),
-              ],
+            child: Builder(
+              builder: (context) {
+                switch (currentPageIndex) {
+                  case 0:
+                    return const HomePage();
+                  case 1:
+                    return const WatchedPage();
+                  case 2:
+                    return const OfflinePage();
+                  case 3:
+                    return const SettingsPage();
+                  default:
+                    return const HomePage();
+                }
+              },
             ),
           ),
         ],
@@ -53,26 +74,37 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _buildMenuItem(IconData icon, String label, int index, FocusNode focusNode) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+  Widget _buildMenuItem(
+    final IconData icon,
+    final String title,
+    final int pageIndex,
+    final FocusNode focusNode,
+  ) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          currentPageIndex = pageIndex;
+        });
+      },
       child: Focus(
         focusNode: focusNode,
         onFocusChange: (hasFocus) {
-          if (hasFocus) {
-            setState(() {
-              currentPageIndex = index;
-            });
-          }
+          setState(() {});
         },
-        child: ListTile(
-          tileColor: focusNode.hasFocus ? Colors.green : Colors.transparent,
-          leading: Icon(icon, color: focusNode.hasFocus ? Colors.white : Colors.grey),
-          title: Text(
-            label,
-            style: TextStyle(
-              color: focusNode.hasFocus ? Colors.white : Colors.grey,
-            ),
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          color: focusNode.hasFocus ? Colors.pink : Colors.transparent,
+          child: Row(
+            children: [
+              Icon(icon, color: focusNode.hasFocus ? Colors.white : Colors.grey),
+              const SizedBox(width: 10),
+              Text(
+                title,
+                style: TextStyle(
+                  color: focusNode.hasFocus ? Colors.white : Colors.grey,
+                ),
+              ),
+            ],
           ),
         ),
       ),

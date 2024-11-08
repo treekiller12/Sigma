@@ -45,32 +45,46 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildFilmCard(final BuildContext context, final Film film) {
-    return Card(
-      child: InkWell(
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (final context) => FilmScreen(
-                url: film.link,
-                title: film.title,
-                image: film.imageUrl,
-              ),
-            ),
-          );
+    return Focus(
+      onFocusChange: (hasFocus) {
+        setState(() {});
+      },
+      child: MouseRegion(
+        onEnter: (_) {
+          setState(() {});
         },
-        child: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-          child: FastCachedImage(
-              url: film.imageUrl,
-              fit: BoxFit.cover,
-              loadingBuilder: (final context, final progress) => SizedBox(
-                    height: 180,
-                    width: 116,
-                    child: Center(
-                      child: CircularProgressIndicator(
-                          value: progress.progressPercentage.value),
-                    ),
-                  )),
+        onExit: (_) {
+          setState(() {});
+        },
+        child: Card(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (final context) => FilmScreen(
+                    url: film.link,
+                    title: film.title,
+                    image: film.imageUrl,
+                  ),
+                ),
+              );
+            },
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+              child: FastCachedImage(
+                  url: film.imageUrl,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (final context, final progress) => SizedBox(
+                        height: 180,
+                        width: 116,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                              value: progress.progressPercentage.value),
+                        ),
+                      )),
+            ),
+          ),
         ),
       ),
     );
@@ -135,8 +149,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 scrollDirection: Axis.horizontal,
                                 children: [
                                   for (final Film film
-                                      in snapshot.data?.getFilms(category) ??
-                                          [])
+                                      in snapshot.data?.getFilms(category) ?? [])
                                     _buildFilmCard(context, film),
                                 ],
                               ),
