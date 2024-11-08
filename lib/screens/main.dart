@@ -26,67 +26,48 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: isExpanded
-            ? Row(
-                children: [
-                  Image.asset(
-                    'assets/logo.png', // Path to your logo
-                    height: 24,
-                    width: 24,
-                  ),
-                  const SizedBox(width: 8),
-                  const Text(
-                    "Filman TV Client",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              )
-            : null,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(0), // Hide the top app bar
+        child: Container(),
       ),
       body: Row(
         children: [
           // Side menu (left panel)
-          MouseRegion(
-            onEnter: (_) {
-              setState(() {
-                isExpanded = true;
-              });
-            },
-            onExit: (_) {
-              setState(() {
-                isExpanded = false;
-              });
-            },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              width: isExpanded ? 180 : 60, // Set the width of the sidebar
-              color: Colors.grey[850], // Dark gray color for the menu
-              child: ListView(
-                children: [
-                  // Logo at the top
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Image.asset(
-                      'assets/logo.png', // Make sure to update the path to your logo
-                      height: 40,
-                      width: 40,
+          FocusTraversalGroup(
+            child: MouseRegion(
+              onEnter: (_) {
+                setState(() {
+                  isExpanded = true;
+                });
+              },
+              onExit: (_) {
+                setState(() {
+                  isExpanded = false;
+                });
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                width: isExpanded ? 200 : 60, // Toggle width based on expansion state
+                color: Colors.grey[850], // Dark gray color for the menu
+                child: ListView(
+                  children: [
+                    // Logo at the top
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Image.asset(
+                        'assets/logo.png', // Update the path to your logo
+                        height: 50,
+                        width: 50,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20), // Add space between logo and items
-                  // Menu items (icons)
-                  _buildMenuItem(Icons.home, "Strona Główna", 0),
-                  _buildMenuItem(Icons.watch_later, "Oglądane", 1),
-                  _buildMenuItem(Icons.download, "Pobrane", 2),
-                  _buildMenuItem(Icons.settings, "Ustawienia", 3),
-                  _buildMenuItem(Icons.logout, "Wyloguj", 4),
-                ],
+                    // Menu items
+                    _buildMenuItem(Icons.home, "Strona Główna", 0),
+                    _buildMenuItem(Icons.watch_later, "Oglądane", 1),
+                    _buildMenuItem(Icons.download, "Pobrane", 2),
+                    _buildMenuItem(Icons.settings, "Ustawienia", 3),
+                    _buildMenuItem(Icons.logout, "Wyloguj", 4),
+                  ],
+                ),
               ),
             ),
           ),
@@ -114,6 +95,7 @@ class _MainScreenState extends State<MainScreen> {
       leading: Icon(
         icon,
         color: isSelected ? Colors.redAccent : Colors.white,
+        size: 24, // Smaller icon size
       ),
       title: AnimatedOpacity(
         opacity: isExpanded ? 1.0 : 0.0, // Show the label only when expanded
@@ -123,6 +105,7 @@ class _MainScreenState extends State<MainScreen> {
           style: TextStyle(
             color: isSelected ? Colors.redAccent : Colors.white,
             fontWeight: FontWeight.bold,
+            fontSize: 14, // Smaller text size for the label
           ),
         ),
       ),
