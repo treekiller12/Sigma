@@ -1,4 +1,4 @@
-import "package:dynamic_color/dynamic_color.dart";
+import "package:dynamic_color/dynamic_color.dart"; 
 import "package:flutter/material.dart";
 import "package:media_kit/media_kit.dart";
 import "package:provider/provider.dart";
@@ -10,7 +10,7 @@ import "package:unofficial_filman_client/notifiers/watched.dart";
 import "package:unofficial_filman_client/screens/hello.dart";
 import "package:unofficial_filman_client/screens/main.dart";
 import "package:fast_cached_network_image/fast_cached_network_image.dart";
-import 'package:flutter/services.dart';  // Import for key events
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,12 +46,6 @@ void main() async {
   );
 }
 
-class LeftIntent extends Intent {}
-class RightIntent extends Intent {}
-class UpIntent extends Intent {}
-class DownIntent extends Intent {}
-class ActionIntent extends Intent {}
-
 class MyApp extends StatelessWidget {
   final bool isAuth;
 
@@ -79,46 +73,49 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         themeMode: Provider.of<SettingsNotifier>(context).theme,
-        home: Shortcuts(
-          shortcuts: <LogicalKeySet, Intent>{
-            LogicalKeySet(LogicalKeyboardKey.arrowUp): UpIntent(),
-            LogicalKeySet(LogicalKeyboardKey.arrowDown): DownIntent(),
-            LogicalKeySet(LogicalKeyboardKey.arrowLeft): LeftIntent(),
-            LogicalKeySet(LogicalKeyboardKey.arrowRight): RightIntent(),
-            LogicalKeySet(LogicalKeyboardKey.select): ActionIntent(),  // Enter key
-          },
-          child: Actions(
-            actions: {
-              LeftIntent: CallbackAction(onInvoke: (Intent i) {
-                // Handle Left button press here
-                print('Left pressed');
-                return null;
-              }),
-              RightIntent: CallbackAction(onInvoke: (Intent i) {
-                // Handle Right button press here
-                print('Right pressed');
-                return null;
-              }),
-              UpIntent: CallbackAction(onInvoke: (Intent i) {
-                // Handle Up button press here
-                print('Up pressed');
-                return null;
-              }),
-              DownIntent: CallbackAction(onInvoke: (Intent i) {
-                // Handle Down button press here
-                print('Down pressed');
-                return null;
-              }),
-              ActionIntent: CallbackAction(onInvoke: (Intent i) {
-                // Handle Enter (select) button press here
-                print('Action (Select) pressed');
-                return null;
-              }),
-            },
-            child: isAuth ? const MainScreen() : const HelloScreen(),
-          ),
-        ),
+        home: const SizedBox.shrink(),  // Pusta strona
       );
     });
+  }
+}
+
+class LeftIntent extends Intent {}
+class RightIntent extends Intent {}
+class UpIntent extends Intent {}
+class DownIntent extends Intent {}
+class ActionIntent extends Intent {}
+
+class _MainScreenState extends State<MainScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Shortcuts(
+      shortcuts: <LogicalKeySet, Intent> {
+        LogicalKeySet(LogicalKeyboardKey.arrowUp): UpIntent(),
+        LogicalKeySet(LogicalKeyboardKey.arrowDown): DownIntent(),
+        LogicalKeySet(LogicalKeyboardKey.arrowLeft): LeftIntent(),
+        LogicalKeySet(LogicalKeyboardKey.arrowRight): RightIntent(),
+        LogicalKeySet(LogicalKeyboardKey.select): ActionIntent(),
+      },
+      child: Actions(
+        actions: {
+          LeftIntent: CallbackAction(onInvoke: (Intent i) {
+            // Obsługuje przycisk strzałki w lewo
+          }),
+          RightIntent: CallbackAction(onInvoke: (Intent i) {
+            // Obsługuje przycisk strzałki w prawo
+          }),
+          UpIntent: CallbackAction(onInvoke: (Intent i) {
+            // Obsługuje przycisk strzałki w górę
+          }),
+          DownIntent: CallbackAction(onInvoke: (Intent i) {
+            // Obsługuje przycisk strzałki w dół
+          }),
+          ActionIntent: CallbackAction(onInvoke: (Intent i) {
+            // Obsługuje przycisk "select"
+          }),
+        },
+        child: const SizedBox.shrink(), // Pusta strona
+      ),
+    );
   }
 }
