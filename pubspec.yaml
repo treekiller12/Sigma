@@ -35,6 +35,7 @@ dependencies:
   flutter_inappwebview: ^6.0.0
   bonsoir: ^5.1.10
   device_info_plus: ^10.1.2
+  dpad_container: ^2.0.4
 
 dev_dependencies:
   flutter_test:
