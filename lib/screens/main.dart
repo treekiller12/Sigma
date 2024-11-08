@@ -17,18 +17,28 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int currentPageIndex = 0;
-  final double _scaleOnHover = 1.2; // Powiększenie na hover
 
   @override
   void initState() {
     super.initState();
   }
 
-  // Funkcja do budowania AppBar z gradientem od czarnego do przezroczystego
   AppBar _buildAppBar(final BuildContext context, {final bool showProgress = false}) {
     return AppBar(
       backgroundColor: Colors.transparent, // Tło transparentne
       elevation: 0, // Bez cienia
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.black, // Kolor na górze
+              Colors.transparent, // Przezroczystość na dole
+            ],
+          ),
+        ),
+      ),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start, // Ustawienie w lewo
         children: [
