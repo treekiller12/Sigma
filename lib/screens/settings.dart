@@ -1,7 +1,7 @@
-import 'package:unofficial_filman_client/notifiers/settings.dart';
-import 'package:unofficial_filman_client/utils/title.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import "package:unofficial_filman_client/notifiers/settings.dart";
+import "package:unofficial_filman_client/utils/title.dart";
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
 import 'package:dpad_container/dpad_container.dart'; // import dpad_container
 
 class SettingsScreen extends StatefulWidget {
@@ -12,16 +12,18 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  TitleDisplayType? selectedTitleType;
+  late FocusNode _focusNode;
+  int? _focusedIndex;
 
   @override
   void initState() {
     super.initState();
-    selectedTitleType = Provider.of<SettingsNotifier>(context, listen: false).titleDisplayType;
+    _focusNode = FocusNode();
   }
 
   @override
   void dispose() {
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -34,10 +36,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         title: const Text("Ustawienia"),
       ),
-      body: DPadNavigation( // DPadNavigation do obsługi DPAD
-        child: ListView(
-          children: [
-            ListTile(
+      body: ListView(
+        children: [
+          FocusableActionDetector(
+            onFocusChange: (hasFocus) {
+              setState(() {
+                _focusedIndex = hasFocus ? 0 : null;
+              });
+            },
+            child: ListTile(
               title: const Text("Tryb ciemny"),
               onTap: () {
                 Provider.of<SettingsNotifier>(context, listen: false).setTheme(
@@ -53,99 +60,67 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               ),
             ),
-            const Divider(),
-            const ListTile(
+          ),
+          const Divider(),
+          const FocusableActionDetector(
+            onFocusChange: (hasFocus) {
+              setState(() {
+                _focusedIndex = hasFocus ? 1 : null;
+              });
+            },
+            child: ListTile(
               title: Text("Wyświetlanie tytułów"),
               subtitle: Text(
                   "Tytuły na filamn.cc są dzielone '/' na człony, w zależności od języka. Wybierz, które tytuły chcesz wyświetlać:"),
             ),
-            DPadSelectableWidget<TitleDisplayType>( // Używamy DPadSelectableWidget do obsługi selekcji
-              value: TitleDisplayType.all,
-              selectedValue: selectedTitleType,
-              onSelected: (final TitleDisplayType value) {
-                setState(() {
-                  selectedTitleType = value;
-                });
-                Provider.of<SettingsNotifier>(context, listen: false)
-                    .setTitleDisplayType(value);
-              },
-              child: RadioListTile<TitleDisplayType>(
-                title: const Text("Cały tytuł"),
-                value: TitleDisplayType.all,
-                groupValue: titleType,
-                onChanged: (final TitleDisplayType? value) {
-                  if (value != null) {
-                    Provider.of<SettingsNotifier>(context, listen: false)
-                        .setTitleDisplayType(value);
-                  }
-                },
-              ),
-            ),
-            DPadSelectableWidget<TitleDisplayType>(
-              value: TitleDisplayType.first,
-              selectedValue: selectedTitleType,
-              onSelected: (final TitleDisplayType value) {
-                setState(() {
-                  selectedTitleType = value;
-                });
-                Provider.of<SettingsNotifier>(context, listen: false)
-                    .setTitleDisplayType(value);
-              },
-              child: RadioListTile<TitleDisplayType>(
-                title: const Text("Pierwszy człon tytułu"),
-                value: TitleDisplayType.first,
-                groupValue: titleType,
-                onChanged: (final TitleDisplayType? value) {
-                  if (value != null) {
-                    Provider.of<SettingsNotifier>(context, listen: false)
-                        .setTitleDisplayType(value);
-                  }
-                },
-              ),
-            ),
-            DPadSelectableWidget<TitleDisplayType>(
-              value: TitleDisplayType.second,
-              selectedValue: selectedTitleType,
-              onSelected: (final TitleDisplayType value) {
-                setState(() {
-                  selectedTitleType = value;
-                });
-                Provider.of<SettingsNotifier>(context, listen: false)
-                    .setTitleDisplayType(value);
-              },
-              child: RadioListTile<TitleDisplayType>(
-                title: const Text("Drugi człon tytułu"),
-                value: TitleDisplayType.second,
-                groupValue: titleType,
-                onChanged: (final TitleDisplayType? value) {
-                  if (value != null) {
-                    Provider.of<SettingsNotifier>(context, listen: false)
-                        .setTitleDisplayType(value);
-                  }
-                },
-              ),
-            ),
-            Consumer<SettingsNotifier>(
-                builder: (final context, final settings, final child) =>
-                    ListTile(
-                        subtitle: RichText(
-                            text: TextSpan(
-                      children: [
-                        TextSpan(
-                            text: "Przykładowy tytuł: ",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold)),
-                        TextSpan(
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            text: getDisplayTitle(
-                                "Szybcy i wściekli / The Fast and the Furious",
-                                settings))
-                      ],
-                    )))),
-          ],
-        ),
+          ),
+          RadioListTile<TitleDisplayType>(
+            title: const Text("Cały tytuł"),
+            value: TitleDisplayType.all,
+            groupValue: titleType,
+            onChanged: (final TitleDisplayType? value) {
+              Provider.of<SettingsNotifier>(context, listen: false)
+                  .setTitleDisplayType(value);
+            },
+          ),
+          RadioListTile<TitleDisplayType>(
+            title: const Text("Pierwszy człon tytułu"),
+            value: TitleDisplayType.first,
+            groupValue: titleType,
+            onChanged: (final TitleDisplayType? value) {
+              Provider.of<SettingsNotifier>(context, listen: false)
+                  .setTitleDisplayType(value);
+            },
+          ),
+          RadioListTile<TitleDisplayType>(
+            title: const Text("Drugi człon tytułu"),
+            value: TitleDisplayType.second,
+            groupValue: titleType,
+            onChanged: (final TitleDisplayType? value) {
+              Provider.of<SettingsNotifier>(context, listen: false)
+                  .setTitleDisplayType(value);
+            },
+          ),
+          Consumer<SettingsNotifier>(
+              builder: (final context, final settings, final child) =>
+                  ListTile(
+                      subtitle: RichText(
+                          text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: "Przykładowy tytuł: ",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold)),
+                      TextSpan(
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          text: getDisplayTitle(
+                              "Szybcy i wściekli / The Fast and the Furious",
+                              settings))
+                    ],
+                  )))),
+        ],
       ),
     );
   }
