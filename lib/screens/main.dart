@@ -17,17 +17,18 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int currentPageIndex = 0;
+  final double _scaleOnHover = 1.2; // Powiększenie na hover
 
   @override
   void initState() {
     super.initState();
   }
 
-  // Funkcja do budowania AppBar z gradientem
+  // Funkcja do budowania AppBar z gradientem od czarnego do przezroczystego
   AppBar _buildAppBar(final BuildContext context, {final bool showProgress = false}) {
     return AppBar(
-      backgroundColor: Colors.transparent, // Transparentne tło, bo gradient jest tłem
-      elevation: 0, // Brak cienia
+      backgroundColor: Colors.transparent, // Tło transparentne
+      elevation: 0, // Bez cienia
       title: Row(
         children: [
           // Logo
@@ -64,7 +65,7 @@ class _MainScreenState extends State<MainScreen> {
             },
             icon: const Icon(Icons.settings),
             color: Colors.white,
-            hoverColor: Colors.redAccent, // Efekt podświetlenia
+            hoverColor: Colors.transparent, // Brak podświetlenia na hover
           ),
         ),
         // Ikona wylogowania z efektem podświetlenia
@@ -82,7 +83,7 @@ class _MainScreenState extends State<MainScreen> {
             },
             icon: const Icon(Icons.logout),
             color: Colors.white,
-            hoverColor: Colors.redAccent, // Efekt podświetlenia
+            hoverColor: Colors.transparent, // Brak podświetlenia na hover
           ),
         ),
       ],
@@ -112,18 +113,18 @@ class _MainScreenState extends State<MainScreen> {
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         destinations: <Widget>[
           NavigationDestination(
-            selectedIcon: Icon(Icons.home, color: Colors.redAccent),
-            icon: Icon(Icons.home_outlined),
+            selectedIcon: _buildHoverIcon(Icons.home, true),
+            icon: _buildHoverIcon(Icons.home_outlined, false),
             label: "Strona Główna",
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.watch_later, color: Colors.redAccent),
-            icon: Icon(Icons.watch_later_outlined),
+            selectedIcon: _buildHoverIcon(Icons.watch_later, true),
+            icon: _buildHoverIcon(Icons.watch_later_outlined, false),
             label: "Oglądane",
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.download, color: Colors.redAccent),
-            icon: Icon(Icons.download_outlined),
+            selectedIcon: _buildHoverIcon(Icons.download, true),
+            icon: _buildHoverIcon(Icons.download_outlined, false),
             label: "Pobrane",
           ),
         ],
@@ -135,6 +136,19 @@ class _MainScreenState extends State<MainScreen> {
           WatchedPage(),
           OfflinePage(),
         ],
+      ),
+    );
+  }
+
+  // Funkcja do tworzenia ikon z efektem podświetlenia
+  Widget _buildHoverIcon(IconData icon, bool isSelected) {
+    return MouseRegion(
+      onEnter: (_) => setState(() {}),
+      onExit: (_) => setState(() {}),
+      child: Icon(
+        icon,
+        size: 30,
+        color: isSelected ? Colors.redAccent : Colors.white,
       ),
     );
   }
