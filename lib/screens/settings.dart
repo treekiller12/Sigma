@@ -12,9 +12,12 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  TitleDisplayType? selectedTitleType;
+
   @override
   void initState() {
     super.initState();
+    selectedTitleType = Provider.of<SettingsNotifier>(context, listen: false).titleDisplayType;
   }
 
   @override
@@ -31,7 +34,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         title: const Text("Ustawienia"),
       ),
-      body: DPadFocusTraversalGroup( // Obsługuje nawigację DPAD
+      body: DPadNavigation( // DPadNavigation do obsługi DPAD
         child: ListView(
           children: [
             ListTile(
@@ -56,32 +59,71 @@ class _SettingsScreenState extends State<SettingsScreen> {
               subtitle: Text(
                   "Tytuły na filamn.cc są dzielone '/' na człony, w zależności od języka. Wybierz, które tytuły chcesz wyświetlać:"),
             ),
-            RadioListTile<TitleDisplayType>(
-              title: const Text("Cały tytuł"),
+            DPadSelectableWidget<TitleDisplayType>( // Używamy DPadSelectableWidget do obsługi selekcji
               value: TitleDisplayType.all,
-              groupValue: titleType,
-              onChanged: (final TitleDisplayType? value) {
+              selectedValue: selectedTitleType,
+              onSelected: (final TitleDisplayType value) {
+                setState(() {
+                  selectedTitleType = value;
+                });
                 Provider.of<SettingsNotifier>(context, listen: false)
                     .setTitleDisplayType(value);
               },
+              child: RadioListTile<TitleDisplayType>(
+                title: const Text("Cały tytuł"),
+                value: TitleDisplayType.all,
+                groupValue: titleType,
+                onChanged: (final TitleDisplayType? value) {
+                  if (value != null) {
+                    Provider.of<SettingsNotifier>(context, listen: false)
+                        .setTitleDisplayType(value);
+                  }
+                },
+              ),
             ),
-            RadioListTile<TitleDisplayType>(
-              title: const Text("Pierwszy człon tytułu"),
+            DPadSelectableWidget<TitleDisplayType>(
               value: TitleDisplayType.first,
-              groupValue: titleType,
-              onChanged: (final TitleDisplayType? value) {
+              selectedValue: selectedTitleType,
+              onSelected: (final TitleDisplayType value) {
+                setState(() {
+                  selectedTitleType = value;
+                });
                 Provider.of<SettingsNotifier>(context, listen: false)
                     .setTitleDisplayType(value);
               },
+              child: RadioListTile<TitleDisplayType>(
+                title: const Text("Pierwszy człon tytułu"),
+                value: TitleDisplayType.first,
+                groupValue: titleType,
+                onChanged: (final TitleDisplayType? value) {
+                  if (value != null) {
+                    Provider.of<SettingsNotifier>(context, listen: false)
+                        .setTitleDisplayType(value);
+                  }
+                },
+              ),
             ),
-            RadioListTile<TitleDisplayType>(
-              title: const Text("Drugi człon tytułu"),
+            DPadSelectableWidget<TitleDisplayType>(
               value: TitleDisplayType.second,
-              groupValue: titleType,
-              onChanged: (final TitleDisplayType? value) {
+              selectedValue: selectedTitleType,
+              onSelected: (final TitleDisplayType value) {
+                setState(() {
+                  selectedTitleType = value;
+                });
                 Provider.of<SettingsNotifier>(context, listen: false)
                     .setTitleDisplayType(value);
               },
+              child: RadioListTile<TitleDisplayType>(
+                title: const Text("Drugi człon tytułu"),
+                value: TitleDisplayType.second,
+                groupValue: titleType,
+                onChanged: (final TitleDisplayType? value) {
+                  if (value != null) {
+                    Provider.of<SettingsNotifier>(context, listen: false)
+                        .setTitleDisplayType(value);
+                  }
+                },
+              ),
             ),
             Consumer<SettingsNotifier>(
                 builder: (final context, final settings, final child) =>
