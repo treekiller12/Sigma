@@ -23,10 +23,11 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
   }
 
-  // Funkcja do budowania AppBar
+  // Funkcja do budowania AppBar z gradientem
   AppBar _buildAppBar(final BuildContext context, {final bool showProgress = false}) {
     return AppBar(
-      backgroundColor: Colors.black, // Ustawiamy czarne tło, jak w Netflixie
+      backgroundColor: Colors.transparent, // Transparentne tło, bo gradient jest tłem
+      elevation: 0, // Brak cienia
       title: Row(
         children: [
           // Logo
@@ -49,28 +50,40 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
       actions: [
-        // Ikona ustawień
-        IconButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (final context) => const SettingsScreen(),
-              ),
-            );
-          },
-          icon: const Icon(Icons.settings, color: Colors.white), // Ustawiamy biały kolor dla ikony
+        // Ikona ustawień z efektem podświetlenia
+        MouseRegion(
+          onEnter: (_) => setState(() {}),
+          onExit: (_) => setState(() {}),
+          child: IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (final context) => const SettingsScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.settings),
+            color: Colors.white,
+            hoverColor: Colors.redAccent, // Efekt podświetlenia
+          ),
         ),
-        // Ikona wylogowania
-        IconButton(
-          onPressed: () {
-            Provider.of<FilmanNotifier>(context, listen: false).logout();
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (final context) => const HelloScreen(),
-              ),
-            );
-          },
-          icon: const Icon(Icons.logout, color: Colors.white), // Ustawiamy biały kolor dla ikony
+        // Ikona wylogowania z efektem podświetlenia
+        MouseRegion(
+          onEnter: (_) => setState(() {}),
+          onExit: (_) => setState(() {}),
+          child: IconButton(
+            onPressed: () {
+              Provider.of<FilmanNotifier>(context, listen: false).logout();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (final context) => const HelloScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.logout),
+            color: Colors.white,
+            hoverColor: Colors.redAccent, // Efekt podświetlenia
+          ),
         ),
       ],
       automaticallyImplyLeading: false,
@@ -97,19 +110,19 @@ class _MainScreenState extends State<MainScreen> {
         },
         selectedIndex: currentPageIndex,
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        destinations: const <Widget>[
+        destinations: <Widget>[
           NavigationDestination(
-            selectedIcon: Icon(Icons.home),
+            selectedIcon: Icon(Icons.home, color: Colors.redAccent),
             icon: Icon(Icons.home_outlined),
             label: "Strona Główna",
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.watch_later),
+            selectedIcon: Icon(Icons.watch_later, color: Colors.redAccent),
             icon: Icon(Icons.watch_later_outlined),
             label: "Oglądane",
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.download),
+            selectedIcon: Icon(Icons.download, color: Colors.redAccent),
             icon: Icon(Icons.download_outlined),
             label: "Pobrane",
           ),
