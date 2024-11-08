@@ -1,7 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:unofficial_filman_client/notifiers/filman.dart';
-import 'package:unofficial_filman_client/screens/main.dart';
+import "package:unofficial_filman_client/notifiers/filman.dart";
+import "package:unofficial_filman_client/screens/hello.dart";
+import "package:unofficial_filman_client/screens/main/home.dart";
+import "package:unofficial_filman_client/screens/main/offline.dart";
+import "package:unofficial_filman_client/screens/main/watched.dart";
+import "package:unofficial_filman_client/screens/settings.dart";
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -18,40 +22,43 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
   }
 
-  AppBar _buildAppBar(final BuildContext context,
-      {final bool showProgress = false}) {
+  AppBar _buildAppBar(final BuildContext context, {final bool showProgress = false}) {
     return AppBar(
-      title: Row(
-        children: [
-          Image.asset(
-            'assets/logo.png', // Zaktualizuj ścieżkę do swojego logo
-            height: 30,
-            width: 30,
-          ),
-          const SizedBox(width: 8),
-          const Text(
-            "Filman TV Client",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
       backgroundColor: Colors.transparent,
-      elevation: 0,
+      elevation: 0, // Usuwamy cień
       flexibleSpace: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.black,
-              Colors.transparent,
+              Colors.black, // Kolor na górze
+              Colors.transparent, // Przezroczystość na dole
             ],
           ),
         ),
+      ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          // Logo
+          Image.asset(
+            'assets/logo.png', // Upewnij się, że masz odpowiednią ścieżkę do swojego logo
+            height: 24,
+            width: 24,
+          ),
+          const SizedBox(width: 8),
+          // Nazwa aplikacji - mniejsza czcionka
+          const Text(
+            "Filman TV Client",
+            style: TextStyle(
+              color: Colors.white, // Biały tekst
+              fontSize: 18, // Mniejszy rozmiar tekstu
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+            ),
+          ),
+        ],
       ),
       actions: [
         IconButton(
@@ -62,7 +69,8 @@ class _MainScreenState extends State<MainScreen> {
               ),
             );
           },
-          icon: const Icon(Icons.settings, color: Colors.white),
+          icon: const Icon(Icons.settings),
+          color: Colors.white,
         ),
         IconButton(
           onPressed: () {
@@ -73,14 +81,56 @@ class _MainScreenState extends State<MainScreen> {
               ),
             );
           },
-          icon: const Icon(Icons.logout, color: Colors.white),
+          icon: const Icon(Icons.logout),
+          color: Colors.white,
+        ),
+        // Paski nawigacji w AppBar
+        PopupMenuButton<int>(
+          icon: const Icon(Icons.menu),
+          color: Colors.black,
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              value: 0,
+              child: Text(
+                "Strona Główna",
+                style: TextStyle(
+                  color: Colors.grey[350], // Kolor tekstu szaro-biały
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              value: 1,
+              child: Text(
+                "Oglądane",
+                style: TextStyle(
+                  color: Colors.grey[350], // Kolor tekstu szaro-biały
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              value: 2,
+              child: Text(
+                "Pobrane",
+                style: TextStyle(
+                  color: Colors.grey[350], // Kolor tekstu szaro-biały
+                ),
+              ),
+            ),
+          ],
+          onSelected: (index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
         ),
       ],
       automaticallyImplyLeading: false,
       bottom: showProgress
           ? const PreferredSize(
               preferredSize: Size.fromHeight(4),
-              child: LinearProgressIndicator(),
+              child: LinearProgressIndicator(
+                color: Colors.redAccent,
+              ),
             )
           : null,
     );
@@ -96,29 +146,6 @@ class _MainScreenState extends State<MainScreen> {
           HomePage(),
           WatchedPage(),
           OfflinePage(),
-        ],
-      ),
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (final int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        selectedIndex: currentPageIndex,
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        destinations: const <Widget>[
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            label: "Strona Główna",
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.watch_later_outlined),
-            label: "Oglądane",
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.download_outlined),
-            label: "Pobrane",
-          ),
         ],
       ),
     );
