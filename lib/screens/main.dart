@@ -23,12 +23,33 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
   }
 
-  AppBar _buildAppBar(final BuildContext context,
-      {final bool showProgress = false}) {
+  // Funkcja do budowania AppBar
+  AppBar _buildAppBar(final BuildContext context, {final bool showProgress = false}) {
     return AppBar(
-      title: Text(createTimeBasedGreeting(
-          Provider.of<FilmanNotifier>(context).user?.login ?? "")),
+      backgroundColor: Colors.black, // Ustawiamy czarne tło, jak w Netflixie
+      title: Row(
+        children: [
+          // Logo
+          Image.asset(
+            'assets/logo.png', // Upewnij się, że masz odpowiednią ścieżkę do swojego logo
+            height: 30,
+            width: 30,
+          ),
+          const SizedBox(width: 8),
+          // Nazwa aplikacji
+          const Text(
+            "Filman TV Client",
+            style: TextStyle(
+              color: Colors.white, // Biały tekst
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2, // Zwiększenie odstępów liter
+            ),
+          ),
+        ],
+      ),
       actions: [
+        // Ikona ustawień
         IconButton(
           onPressed: () {
             Navigator.of(context).push(
@@ -37,8 +58,9 @@ class _MainScreenState extends State<MainScreen> {
               ),
             );
           },
-          icon: const Icon(Icons.settings),
+          icon: const Icon(Icons.settings, color: Colors.white), // Ustawiamy biały kolor dla ikony
         ),
+        // Ikona wylogowania
         IconButton(
           onPressed: () {
             Provider.of<FilmanNotifier>(context, listen: false).logout();
@@ -48,14 +70,16 @@ class _MainScreenState extends State<MainScreen> {
               ),
             );
           },
-          icon: const Icon(Icons.logout),
+          icon: const Icon(Icons.logout, color: Colors.white), // Ustawiamy biały kolor dla ikony
         ),
       ],
       automaticallyImplyLeading: false,
       bottom: showProgress
           ? const PreferredSize(
               preferredSize: Size.fromHeight(4),
-              child: LinearProgressIndicator(),
+              child: LinearProgressIndicator(
+                color: Colors.redAccent, // Można dostosować kolor paska ładowania
+              ),
             )
           : null,
     );
@@ -64,7 +88,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(context),
+      appBar: _buildAppBar(context), // Dodajemy zmodyfikowany AppBar
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (final int index) {
           setState(() {
