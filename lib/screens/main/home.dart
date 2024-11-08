@@ -135,8 +135,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 scrollDirection: Axis.horizontal,
                                 children: [
                                   for (final Film film
-                                      in snapshot.data?.getFilms(category) ??
-                                          [])
+                                      in snapshot.data?.getFilms(category) ?? [])
                                     _buildFilmCard(context, film),
                                 ],
                               ),
