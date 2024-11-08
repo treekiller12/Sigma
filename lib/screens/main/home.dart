@@ -18,6 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late Future<HomePageResponse> homePageLoader;
+  bool isHovered = false; // Zmienna stanu dla efektu hover
 
   @override
   void initState() {
@@ -58,19 +59,52 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
           );
         },
+        onHover: (isHovered) {
+          setState(() {
+            this.isHovered = isHovered; // Ustawienie stanu na hover
+          });
+        },
         child: ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-          child: FastCachedImage(
-              url: film.imageUrl,
-              fit: BoxFit.cover,
-              loadingBuilder: (final context, final progress) => SizedBox(
-                    height: 180,
-                    width: 116,
-                    child: Center(
-                      child: CircularProgressIndicator(
-                          value: progress.progressPercentage.value),
+          child: MouseRegion(
+            onEnter: (_) {
+              setState(() {
+                isHovered = true; // Ustawienie stanu na hover po najechaniu
+              });
+            },
+            onExit: (_) {
+              setState(() {
+                isHovered = false; // Resetowanie stanu po opuszczeniu
+              });
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              transform: Matrix4.identity()..scale(isHovered ? 1.05 : 1.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                boxShadow: [
+                  if (isHovered) // Dodajemy cień, gdy jest najechane
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 6,
                     ),
-                  )),
+                ],
+              ),
+              child: FastCachedImage(
+                url: film.imageUrl,
+                fit: BoxFit.cover,
+                loadingBuilder: (final context, final progress) => SizedBox(
+                  height: 180,
+                  width: 116,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                        value: progress.progressPercentage.value),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -135,8 +169,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 scrollDirection: Axis.horizontal,
                                 children: [
                                   for (final Film film
-                                      in snapshot.data?.getFilms(category) ??
-                                          [])
+                                      in snapshot.data?.getFilms(category) ?? [])
                                     _buildFilmCard(context, film),
                                 ],
                               ),
