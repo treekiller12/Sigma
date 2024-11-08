@@ -136,7 +136,7 @@ class _HelloScreenState extends State<HelloScreen> {
                     const Text(
                       "Filman TV Client",
                       style: TextStyle(
-                        color: Colors.blueAccent,
+                        color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
