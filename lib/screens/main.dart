@@ -25,8 +25,8 @@ class _MainScreenState extends State<MainScreen> {
 
   AppBar _buildAppBar(final BuildContext context, {final bool showProgress = false}) {
     return AppBar(
-      backgroundColor: Colors.transparent, // Tło transparentne
-      elevation: 0, // Bez cienia
+      backgroundColor: Colors.transparent,
+      elevation: 0, // Usuwamy cień
       flexibleSpace: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -40,7 +40,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
       title: Row(
-        mainAxisAlignment: MainAxisAlignment.start, // Ustawienie w lewo
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           // Logo
           Image.asset(
@@ -56,46 +56,34 @@ class _MainScreenState extends State<MainScreen> {
               color: Colors.white, // Biały tekst
               fontSize: 18, // Mniejszy rozmiar tekstu
               fontWeight: FontWeight.bold,
-              letterSpacing: 1.2, // Zwiększenie odstępów liter
+              letterSpacing: 1.2,
             ),
           ),
         ],
       ),
       actions: [
-        // Ikona ustawień z efektem podświetlenia
-        MouseRegion(
-          onEnter: (_) => setState(() {}),
-          onExit: (_) => setState(() {}),
-          child: IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (final context) => const SettingsScreen(),
-                ),
-              );
-            },
-            icon: const Icon(Icons.settings),
-            color: Colors.white,
-            hoverColor: Colors.transparent, // Brak podświetlenia na hover
-          ),
+        IconButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (final context) => const SettingsScreen(),
+              ),
+            );
+          },
+          icon: const Icon(Icons.settings),
+          color: Colors.white,
         ),
-        // Ikona wylogowania z efektem podświetlenia
-        MouseRegion(
-          onEnter: (_) => setState(() {}),
-          onExit: (_) => setState(() {}),
-          child: IconButton(
-            onPressed: () {
-              Provider.of<FilmanNotifier>(context, listen: false).logout();
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (final context) => const HelloScreen(),
-                ),
-              );
-            },
-            icon: const Icon(Icons.logout),
-            color: Colors.white,
-            hoverColor: Colors.transparent, // Brak podświetlenia na hover
-          ),
+        IconButton(
+          onPressed: () {
+            Provider.of<FilmanNotifier>(context, listen: false).logout();
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (final context) => const HelloScreen(),
+              ),
+            );
+          },
+          icon: const Icon(Icons.logout),
+          color: Colors.white,
         ),
       ],
       automaticallyImplyLeading: false,
@@ -103,7 +91,7 @@ class _MainScreenState extends State<MainScreen> {
           ? const PreferredSize(
               preferredSize: Size.fromHeight(4),
               child: LinearProgressIndicator(
-                color: Colors.redAccent, // Można dostosować kolor paska ładowania
+                color: Colors.redAccent,
               ),
             )
           : null,
@@ -113,53 +101,73 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(context), // Dodajemy zmodyfikowany AppBar
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (final int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        selectedIndex: currentPageIndex,
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        destinations: <Widget>[
-          NavigationDestination(
-            selectedIcon: _buildHoverIcon(Icons.home, true),
-            icon: _buildHoverIcon(Icons.home_outlined, false),
-            label: "Strona Główna",
+      appBar: _buildAppBar(context),
+      body: Column(
+        children: [
+          // Zmodyfikowany pasek nawigacji z gradientem na górze
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black, // Kolor na górze
+                  Colors.transparent, // Przezroczystość na dole
+                ],
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildNavItem("Strona Główna", 0),
+                  _buildNavItem("Oglądane", 1),
+                  _buildNavItem("Pobrane", 2),
+                ],
+              ),
+            ),
           ),
-          NavigationDestination(
-            selectedIcon: _buildHoverIcon(Icons.watch_later, true),
-            icon: _buildHoverIcon(Icons.watch_later_outlined, false),
-            label: "Oglądane",
+          // Ciało aplikacji
+          Expanded(
+            child: IndexedStack(
+              index: currentPageIndex,
+              children: const [
+                HomePage(),
+                WatchedPage(),
+                OfflinePage(),
+              ],
+            ),
           ),
-          NavigationDestination(
-            selectedIcon: _buildHoverIcon(Icons.download, true),
-            icon: _buildHoverIcon(Icons.download_outlined, false),
-            label: "Pobrane",
-          ),
-        ],
-      ),
-      body: IndexedStack(
-        index: currentPageIndex,
-        children: const [
-          HomePage(),
-          WatchedPage(),
-          OfflinePage(),
         ],
       ),
     );
   }
 
-  // Funkcja do tworzenia ikon z efektem podświetlenia
-  Widget _buildHoverIcon(IconData icon, bool isSelected) {
+  // Funkcja do tworzenia elementów nawigacji z efektem podświetlenia
+  Widget _buildNavItem(String label, int index) {
+    bool isSelected = currentPageIndex == index;
+
     return MouseRegion(
       onEnter: (_) => setState(() {}),
       onExit: (_) => setState(() {}),
-      child: Icon(
-        icon,
-        size: 30,
-        color: isSelected ? Colors.redAccent : Colors.grey, // Szary kolor domyślnie
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            currentPageIndex = index;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: isSelected ? Colors.redAccent : Colors.grey, // Szary kolor, czerwony jak wybrany
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+        ),
       ),
     );
   }
