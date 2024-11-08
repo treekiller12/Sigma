@@ -30,20 +30,21 @@ class _MainScreenState extends State<MainScreen> {
       backgroundColor: Colors.transparent, // Tło transparentne
       elevation: 0, // Bez cienia
       title: Row(
+        mainAxisAlignment: MainAxisAlignment.start, // Ustawienie w lewo
         children: [
           // Logo
           Image.asset(
             'assets/logo.png', // Upewnij się, że masz odpowiednią ścieżkę do swojego logo
-            height: 30,
-            width: 30,
+            height: 24,
+            width: 24,
           ),
           const SizedBox(width: 8),
-          // Nazwa aplikacji
+          // Nazwa aplikacji - mniejsza czcionka
           const Text(
             "Filman TV Client",
             style: TextStyle(
               color: Colors.white, // Biały tekst
-              fontSize: 20,
+              fontSize: 18, // Mniejszy rozmiar tekstu
               fontWeight: FontWeight.bold,
               letterSpacing: 1.2, // Zwiększenie odstępów liter
             ),
@@ -148,7 +149,7 @@ class _MainScreenState extends State<MainScreen> {
       child: Icon(
         icon,
         size: 30,
-        color: isSelected ? Colors.redAccent : Colors.white,
+        color: isSelected ? Colors.redAccent : Colors.grey, // Szary kolor domyślnie
       ),
     );
   }
