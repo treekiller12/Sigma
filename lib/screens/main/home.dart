@@ -51,7 +51,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       onFocusChange: (hasFocus) {
         setState(() {
           // Przypisanie stanu powiększenia na podstawie focusa
-          // Jeśli film ma fokus, powiększamy jego obraz
         });
       },
       child: Card(
@@ -69,37 +68,32 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           },
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-            child: FocusedBuilder(
-              focusNode: focusNode,
-              builder: (context, isFocused) {
-                return AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  transform: Matrix4.identity()..scale(isFocused ? 1.15 : 1.0), // Powiększenie obrazu
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
-                    boxShadow: [
-                      if (isFocused) // Dodanie cienia, gdy film jest wybrany
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 6,
-                        ),
-                    ],
-                  ),
-                  child: FastCachedImage(
-                    url: film.imageUrl,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (final context, final progress) => SizedBox(
-                      height: 180,
-                      width: 116,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                            value: progress.progressPercentage.value),
-                      ),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              transform: Matrix4.identity()..scale(focusNode.hasFocus ? 1.15 : 1.0), // Powiększenie obrazu
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                boxShadow: [
+                  if (focusNode.hasFocus) // Dodanie cienia, gdy film jest wybrany
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 6,
                     ),
+                ],
+              ),
+              child: FastCachedImage(
+                url: film.imageUrl,
+                fit: BoxFit.cover,
+                loadingBuilder: (final context, final progress) => SizedBox(
+                  height: 180,
+                  width: 116,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                        value: progress.progressPercentage.value),
                   ),
-                );
-              },
+                ),
+              ),
             ),
           ),
         ),
