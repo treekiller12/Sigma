@@ -29,33 +29,26 @@ class _MainScreenState extends State<MainScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('Filman TV Client'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (final context) => const SettingsScreen(),
-                ),
-              );
-            },
-            icon: const Icon(Icons.settings),
-            color: Colors.white,
-          ),
-          IconButton(
-            onPressed: () {
-              Provider.of<FilmanNotifier>(context, listen: false).logout();
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (final context) => const HelloScreen(),
-                ),
-              );
-            },
-            icon: const Icon(Icons.logout),
-            color: Colors.white,
-          ),
-        ],
-        automaticallyImplyLeading: false,
+        title: isExpanded
+            ? Row(
+                children: [
+                  Image.asset(
+                    'assets/logo.png', // Path to your logo
+                    height: 24,
+                    width: 24,
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    "Filman TV Client",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              )
+            : null,
       ),
       body: Row(
         children: [
@@ -73,7 +66,7 @@ class _MainScreenState extends State<MainScreen> {
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              width: isExpanded ? 200 : 60, // Toggle width based on expansion state
+              width: isExpanded ? 180 : 60, // Set the width of the sidebar
               color: Colors.grey[850], // Dark gray color for the menu
               child: ListView(
                 children: [
@@ -82,11 +75,12 @@ class _MainScreenState extends State<MainScreen> {
                     padding: const EdgeInsets.all(16.0),
                     child: Image.asset(
                       'assets/logo.png', // Make sure to update the path to your logo
-                      height: 50,
-                      width: 50,
+                      height: 40,
+                      width: 40,
                     ),
                   ),
-                  // Menu items
+                  const SizedBox(height: 20), // Add space between logo and items
+                  // Menu items (icons)
                   _buildMenuItem(Icons.home, "Strona Główna", 0),
                   _buildMenuItem(Icons.watch_later, "Oglądane", 1),
                   _buildMenuItem(Icons.download, "Pobrane", 2),
