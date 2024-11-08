@@ -1,14 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:media_kit/media_kit.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:unofficial_filman_client/notifiers/download.dart';
-import 'package:unofficial_filman_client/notifiers/filman.dart';
-import 'package:unofficial_filman_client/notifiers/settings.dart';
-import 'package:unofficial_filman_client/notifiers/watched.dart';
-import 'package:unofficial_filman_client/screens/hello.dart';
-import 'package:unofficial_filman_client/screens/main.dart';
-import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import "package:dynamic_color/dynamic_color.dart";
+import "package:flutter/material.dart";
+import "package:media_kit/media_kit.dart";
+import "package:provider/provider.dart";
+import "package:shared_preferences/shared_preferences.dart";
+import "package:unofficial_filman_client/notifiers/download.dart";
+import "package:unofficial_filman_client/notifiers/filman.dart";
+import "package:unofficial_filman_client/notifiers/settings.dart";
+import "package:unofficial_filman_client/notifiers/watched.dart";
+import "package:unofficial_filman_client/screens/hello.dart";
+import "package:unofficial_filman_client/screens/main.dart";
+import "package:fast_cached_network_image/fast_cached_network_image.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
